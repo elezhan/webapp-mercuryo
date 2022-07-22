@@ -19,7 +19,6 @@
         </select>
         <input   type="submit"    onclick="captureSubmitData()">
       </form> 
-       <!-- <iframe id='ifr' frameborder="0" scrolling="no" width="800" height="800" src="https://sendnomad.com"> -->
 
 
         <div id="mercuryo-widget">
@@ -43,14 +42,10 @@
               }
         function openWidget({merchant_transaction_id,username,sendcurrency,amount}) {
       
-        // let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchantTransactionId=${merchant_transaction_id}&fiatCurrency=${sendcurrency}&fixFiatCurrency=${true}&fiatAmount=${amount}&fixFiatAmount=${true}&signature=${signature}`
-        //  alert(myurl)
-        //  window.open(myurl, "_blank");
+
          mercuryoWidget.run({ widgetId: 'a8c1dead-ed5f-4740-b9ce-c4ea7721c93b', host: document.getElementById('mercuryo-widget'),address:address,signature:signature, merchantTransactionId: merchant_transaction_id, fiatCurrency:sendcurrency,fixFiatCurrency:true,fiatAmount:amount,fixFiatAmount:true,  });
-        //  document.getElementById("ifr").src=myurl;
       
       }
-      // mercuryoWidget.run({ widgetId: 'a8c1dead-ed5f-4740-b9ce-c4ea7721c93b', host: document.getElementById('mercuryo-widget') });
           function captureSubmitData() {
                 username = document.getElementById("username").value;
                 sendcurrency = document.getElementById("currency").value;
@@ -58,10 +53,8 @@
                 .post(`https://us-central1-nomad-91174.cloudfunctions.net/makeMercuryoReservation?username=${username}&sendcurrency=${sendcurrency}&amount=${hardcoded_options.amount}`)
                 .then((res)=>{
                   merchant_transaction_id = res.data.merchant_transaction_id
-                  // let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchant_transaction_id=${merchant_transaction_id}&type=buy&sendcurrency=${sendcurrency}&fiatAmount=${hardcoded_options.amount}&fixFiatAmount=${true}`
-                  alert("hi")
+                  alert("opening widget")
                   openWidget({merchant_transaction_id,username,sendcurrency,amount:hardcoded_options.amount})
-                  // document.getElementById("ifr").src=myurl;
                 })
                 .catch((err)=>{
                   alert("err")
