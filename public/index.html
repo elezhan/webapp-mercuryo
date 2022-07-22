@@ -8,45 +8,7 @@
   </head>
   <body>
 
-    <script type="text/javascript">
-    var hardcoded_options = {
-          amount: 30
-   }
-   var username
-   var sendcurrency
-   var merchant_transaction_id
-   var widgetId = "7fcadb11-47cc-495f-8538-1eb1a5fc883c"
-   var address = "0xe915a4b337b589a3e31f9b5918da9f2b552b95c8"
-   var signature = "12efc47de55307fca0ad19907312d7e91b7bb152aa5d8a8813ea23b1ac1ca96b6c15c913e448811828e5a04023a1717da038c4ad2601c001d33cfdfef0f06967"
-   function openIframe({merchant_transaction_id,username,sendcurrency,amount}) {
-
-          let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchantTransactionId=${merchant_transaction_id}&fiatCurrency=${sendcurrency}&fixFiatCurrency=${true}&fiatAmount=${amount}&fixFiatAmount=${true}&signature=${signature}`
-             alert(myurl)
-             document.getElementById("ifr").src=myurl;
-         
-        }
-
-    function captureSubmitData() {
-          username = document.getElementById("username").value;
-          sendcurrency = document.getElementById("currency").value;
-          axios
-          .post(`https://us-central1-nomad-91174.cloudfunctions.net/makeMercuryoReservation?username=${username}&sendcurrency=${sendcurrency}&amount=${hardcoded_options.amount}`)
-          .then((res)=>{
-            merchant_transaction_id = res.data.merchant_transaction_id
-            // let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchant_transaction_id=${merchant_transaction_id}&type=buy&sendcurrency=${sendcurrency}&fiatAmount=${hardcoded_options.amount}&fixFiatAmount=${true}`
-            alert("hi")
-            openIframe({merchant_transaction_id,username,sendcurrency,amount:hardcoded_options.amount})
-            // document.getElementById("ifr").src=myurl;
-          })
-          .catch((err)=>{
-            alert("err")
-            console.log("err", err)
-            console.log(res.data)
-          })
-          
-    }
-
-    </script>
+    
       <form id="form" onsubmit="return false;">
         <input  type="text" id="username">
         <select id="currency" name="currency">
@@ -57,9 +19,59 @@
         </select>
         <input   type="submit"    onclick="captureSubmitData()">
       </form> 
-       <iframe id='ifr' frameborder="0" scrolling="no" width="800" height="800" src="https://sendnomad.com">
+       <!-- <iframe id='ifr' frameborder="0" scrolling="no" width="800" height="800" src="https://sendnomad.com"> -->
 
 
-        <p>When the target attribute of a link matches the name of an iframe, the link will open in the iframe.</p>
+        <div id="mercuryo-widget">
+        </div>
+        <script type="text/javascript">
+          var hardcoded_options = {
+                amount: 30
+         }
+         var username
+         var sendcurrency
+         var merchant_transaction_id
+         var widgetId = "7fcadb11-47cc-495f-8538-1eb1a5fc883c"
+         var address = "0xe915a4b337b589a3e31f9b5918da9f2b552b95c8"
+         var signature = "12efc47de55307fca0ad19907312d7e91b7bb152aa5d8a8813ea23b1ac1ca96b6c15c913e448811828e5a04023a1717da038c4ad2601c001d33cfdfef0f06967"
+         function redirectTo({merchant_transaction_id,username,sendcurrency,amount}) {
+      
+                let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchantTransactionId=${merchant_transaction_id}&fiatCurrency=${sendcurrency}&fixFiatCurrency=${true}&fiatAmount=${amount}&fixFiatAmount=${true}&signature=${signature}`
+                   alert(myurl)
+                   window.open(myurl, "_blank");
+               
+              }
+        function openWidget({merchant_transaction_id,username,sendcurrency,amount}) {
+      
+        // let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchantTransactionId=${merchant_transaction_id}&fiatCurrency=${sendcurrency}&fixFiatCurrency=${true}&fiatAmount=${amount}&fixFiatAmount=${true}&signature=${signature}`
+        //  alert(myurl)
+        //  window.open(myurl, "_blank");
+         mercuryoWidget.run({ widgetId: 'a8c1dead-ed5f-4740-b9ce-c4ea7721c93b', host: document.getElementById('mercuryo-widget'),address:address,signature:signature, merchantTransactionId: merchant_transaction_id, fiatCurrency:sendcurrency,fixFiatCurrency:true,fiatAmount:amount,fixFiatAmount:true,  });
+        //  document.getElementById("ifr").src=myurl;
+      
+      }
+      // mercuryoWidget.run({ widgetId: 'a8c1dead-ed5f-4740-b9ce-c4ea7721c93b', host: document.getElementById('mercuryo-widget') });
+          function captureSubmitData() {
+                username = document.getElementById("username").value;
+                sendcurrency = document.getElementById("currency").value;
+                axios
+                .post(`https://us-central1-nomad-91174.cloudfunctions.net/makeMercuryoReservation?username=${username}&sendcurrency=${sendcurrency}&amount=${hardcoded_options.amount}`)
+                .then((res)=>{
+                  merchant_transaction_id = res.data.merchant_transaction_id
+                  // let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchant_transaction_id=${merchant_transaction_id}&type=buy&sendcurrency=${sendcurrency}&fiatAmount=${hardcoded_options.amount}&fixFiatAmount=${true}`
+                  alert("hi")
+                  openWidget({merchant_transaction_id,username,sendcurrency,amount:hardcoded_options.amount})
+                  // document.getElementById("ifr").src=myurl;
+                })
+                .catch((err)=>{
+                  alert("err")
+                  console.log("err", err)
+                  console.log(res.data)
+                })
+                
+          }
+      
+          </script>
+        <script src="https://widget.mercuryo.io/embed.2.0.js"></script>
   </body>
 </html>
