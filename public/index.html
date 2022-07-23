@@ -10,7 +10,7 @@
 
     
       <form id="form" onsubmit="return false;">
-        <input  type="text" id="username">
+        <input  type="text" id="username" placeholder="name">
         <select id="currency" name="currency">
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
@@ -26,7 +26,8 @@
         <script src="https://widget.mercuryo.io/embed.2.0.js"></script>
         <script type="text/javascript">
           var hardcoded_options = {
-                amount: 30
+                amount: 30,
+                lang:"en"
          }
          var username
          var sendcurrency
@@ -36,9 +37,8 @@
          var signature = "12efc47de55307fca0ad19907312d7e91b7bb152aa5d8a8813ea23b1ac1ca96b6c15c913e448811828e5a04023a1717da038c4ad2601c001d33cfdfef0f06967"
          function redirectTo({merchant_transaction_id,username,sendcurrency,amount}) {
       
-                let myurl = `https://mercuryo-nomad.web.app?widgetId=${widgetId}&address=${address}&signature=${signature}&merchantTransactionId=${merchant_transaction_id}&fiatCurrency=${sendcurrency}&fixFiatCurrency=${true}&fiatAmount=${amount}&fixFiatAmount=${true}&signature=${signature}`
-                   alert(myurl)
-                   window.open(myurl, "_blank");
+                let myurl = `https://mercuryo-nomad.web.app?address=${address}&signature=${signature}&merchantTransactionId=${merchant_transaction_id}&fiatCurrency=${sendcurrency}&fixFiatCurrency=${true}&fiatAmount=${amount}&fixFiatAmount=${true}&signature=${signature}&lang=${hardcoded_options.lang}`
+                  window.open(myurl, "_blank");
                
               }
         function openWidget({merchant_transaction_id,username,sendcurrency,amount}) {
@@ -55,12 +55,11 @@
                 .then((res)=>{
                   merchant_transaction_id = res.data.merchant_transaction_id
                   alert("opening widget")
-                  openWidget({merchant_transaction_id,username,sendcurrency,amount:hardcoded_options.amount})
+                  redirectTo({merchant_transaction_id,username,sendcurrency,amount:hardcoded_options.amount})
                 })
                 .catch((err)=>{
                   alert("err")
                   console.log("err", err)
-                  console.log(res.data)
                 })
                 
           }
